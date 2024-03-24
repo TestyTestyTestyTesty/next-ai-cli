@@ -1,10 +1,10 @@
 import axios, { AxiosError } from "axios";
 
-export const fetchTokenForTask = async (taskName: string) => {
+export const fetchTaskData = async (token: string) => {
   try {
-    const response = await axios.get(`/api/get-token/${taskName}`);
-    if (response.data.token) {
-      return response.data.token;
+    const response = await axios.get(`/api/get-task-data/${token}`);
+    if (response.data) {
+      return response.data;
     } else {
       throw new Error(response.data.msg);
     }
