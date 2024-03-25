@@ -1,5 +1,5 @@
-import { useState, useCallback, useEffect } from "react";
 import { fetchTokenForTask } from "@/app/helpers/fetchTokenForTask";
+import { useCallback, useState } from "react";
 
 export const useGetToken = () => {
   const [token, setToken] = useState("");

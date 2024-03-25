@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import { fetchTaskData } from "../helpers/fetchTaskData";
 import { submitAnswer } from "../helpers/submitAnswer";
 interface submitData {
   answer: any;

@@ -1,11 +1,9 @@
 "use client";
-import { customHeaders } from "@/app/helpers/customHeader";
 import { useCheckDataInModerationApi } from "@/app/hooks/useCheckDataInModerationApi";
 import { useGetTaskData } from "@/app/hooks/useGetTaskData";
 import { useGetToken } from "@/app/hooks/useGetToken";
 import { useSubmitTask } from "@/app/hooks/useSubmitTask";
 import { Spinner } from "@/app/modules/Spinner";
-import axios from "axios";
 import { useEffect, useState } from "react";
 
 const testData = [

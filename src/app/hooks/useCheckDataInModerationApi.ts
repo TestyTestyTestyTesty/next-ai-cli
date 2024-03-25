@@ -1,5 +1,4 @@
 import axios from "axios";
-import React, { useState } from "react";
 import { customHeaders } from "../helpers/customHeader";
 
 export const useCheckDataInModerationApi = () => {
