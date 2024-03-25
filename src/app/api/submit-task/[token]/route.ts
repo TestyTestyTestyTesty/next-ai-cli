@@ -5,7 +5,6 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request, res: NextApiResponse) {
   const data = await req.json();
-
   const token = req.url?.split("/").pop();
   if (!token || !data) {
     return res.status(400).send("Required data was not send");
