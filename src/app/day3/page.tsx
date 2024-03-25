@@ -4,7 +4,7 @@ import { useGetTaskData } from "../hooks/useGetTaskData";
 import { useGetToken } from "../hooks/useGetToken";
 import { useSubmitTask } from "../hooks/useSubmitTask";
 
-export default function HelloApi() {
+export default function Categorizer() {
   const { token, getToken } = useGetToken();
   const { taskData, getTaskData } = useGetTaskData();
   const { submitTask, setSubmitData, submitData } = useSubmitTask();

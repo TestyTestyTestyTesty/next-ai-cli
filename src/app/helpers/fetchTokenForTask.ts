@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
 export const fetchTokenForTask = async (taskName: string) => {
   try {
