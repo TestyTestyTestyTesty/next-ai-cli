@@ -5,16 +5,23 @@ interface submitData {
 }
 export const useSubmitTask = () => {
   const [submitData, setSubmitData] = useState<submitData | null>(null);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitResponse, setSubmitResponse] = useState<any>(null);
   const submitTask = useCallback(async (token: string, data: any) => {
     if (!token || !data) return;
     try {
-      const response = await submitAnswer(token, data);
-      console.log(response);
+      setIsLoading(true);
+      const res = await submitAnswer(token, data);
+      console.log(res);
+      if (res) {
+        setSubmitResponse(res);
+      }
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
-  return { submitData, setSubmitData, submitTask };
+  return { submitData, submitResponse, setSubmitData, submitTask, isLoading };
 };

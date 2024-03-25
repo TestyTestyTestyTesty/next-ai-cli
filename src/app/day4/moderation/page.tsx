@@ -4,6 +4,7 @@ import { useGetTaskData } from "@/app/hooks/useGetTaskData";
 import { useGetToken } from "@/app/hooks/useGetToken";
 import { useSubmitTask } from "@/app/hooks/useSubmitTask";
 import { Spinner } from "@/app/modules/Spinner";
+import { isNull } from "lodash";
 import { useEffect, useState } from "react";
 
 const testData = [
@@ -13,7 +14,7 @@ const testData = [
   "majonez Winiary jest lepszy od Kieleckiego",
 ];
 
-export default function Categorizer() {
+export default function Moderation() {
   const { token, getToken, isLoading: isTokenLoading } = useGetToken();
   const {
     taskData,
@@ -21,8 +22,15 @@ export default function Categorizer() {
     isLoading: isTaskDataLoading,
   } = useGetTaskData();
   const [transformedResponse, setTransformedResponse] = useState<any>(null);
-  const { submitTask, setSubmitData, submitData } = useSubmitTask();
-  const { getResponseFromModerationApi } = useCheckDataInModerationApi();
+  const {
+    submitTask,
+    setSubmitData,
+    submitData,
+    submitResponse,
+    isLoading: isSubmitting,
+  } = useSubmitTask();
+  const { getResponseFromModerationApi, isLoading: isModerationApiLoading } =
+    useCheckDataInModerationApi();
 
   const checkTestDataInModerationApi = async () => {
     const res = await getResponseFromModerationApi(testData);
@@ -43,7 +51,6 @@ export default function Categorizer() {
       setSubmitData({ answer: transformedResponse });
     }
   }, [setSubmitData, taskData, transformedResponse]);
-
   return (
     <>
       <p onClick={checkTestDataInModerationApi}>
@@ -60,13 +67,20 @@ export default function Categorizer() {
         </div>
       )}
       {taskData && (
-        <p onClick={() => checkDataInModerationApi(taskData.input)}>
-          Check input in moderation API
-        </p>
+        <div className="flex gap-4 items-center">
+          <p onClick={() => checkDataInModerationApi(taskData.input)}>
+            Check input in moderation API
+          </p>
+          {isModerationApiLoading && <Spinner />}
+        </div>
       )}
       {transformedResponse && (
-        <p onClick={() => submitTask(token, submitData)}>Submit task</p>
+        <div className="flex gap-4 items-center">
+          <p onClick={() => submitTask(token, submitData)}>Submit task</p>
+          {isSubmitting && <Spinner />}
+        </div>
       )}
+      {!isNull(submitResponse) && <p>{JSON.stringify(submitResponse)}</p>}
     </>
   );
 }
