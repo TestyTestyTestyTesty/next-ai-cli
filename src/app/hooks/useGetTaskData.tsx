@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { fetchTaskData } from "../helpers/fetchTaskData";
+import { fetchTaskData, requestMethod } from "../helpers/fetchTaskData";
 
 export const useGetTaskData = () => {
   const [taskData, setTaskData] = useState<any | null>(null);
@@ -8,7 +8,10 @@ export const useGetTaskData = () => {
   const getTaskData = useCallback(async (token: string) => {
     try {
       setIsLoading(true);
-      const fetchedData = await fetchTaskData(token);
+      const fetchedData = await fetchTaskData({
+        token,
+        method: requestMethod.GET,
+      });
       if (fetchedData) {
         setTaskData(fetchedData);
       }
