@@ -1,11 +1,11 @@
 "use client";
 import Link from "next/link";
 
-export default function Day5() {
+export default function Day7() {
   return (
     <>
-      <Link href="/day5/liar">
-        <p>liar</p>
+      <Link href="/day7/inprompt">
+        <p>inprompt</p>
       </Link>
     </>
   );
