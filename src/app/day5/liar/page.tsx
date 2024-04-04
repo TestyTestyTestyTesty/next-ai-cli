@@ -1,27 +1,29 @@
 "use client";
+import { customHeadersWwwFromUrlEncoded } from "@/app/helpers/customHeaders";
 import { useCompletionApi } from "@/app/hooks/useCompletionApi";
-import { useGetTaskData } from "@/app/hooks/useGetTaskData";
 import { useGetToken } from "@/app/hooks/useGetToken";
+import { usePostTaskData } from "@/app/hooks/usePostTaskData";
 import { useSubmitTask } from "@/app/hooks/useSubmitTask";
 import { Spinner } from "@/app/modules/Spinner";
 import { isNull } from "lodash";
+import testJson from "./test.json";
+import { useEffect, useState } from "react";
 
-const testData = [
-  "Wstęp: kilka słów na temat historii pizzy",
-  "Niezbędne składniki na pizzę",
-  "Robienie pizzy",
-  "Pieczenie pizzy w piekarniku",
-];
-
-export default function Moderation() {
+const testAnswer =
+  "Despite the controversy, Hawaiian pizza remains one of the top-selling pizzas worldwide.";
+const testAnswerTrue = "Warsaw is the capitol of poland";
+export default function Liar() {
   const { token, getToken, isLoading: isTokenLoading } = useGetToken();
+  const [guardrailAnswer, setGuardrailAnswer] = useState<null | string>(null);
   const { getResponseFromCompletionApi, isLoading: isCompletionLoading } =
     useCompletionApi();
+
   const {
     taskData,
-    getTaskData,
+    postTaskData,
     isLoading: isTaskDataLoading,
-  } = useGetTaskData();
+  } = usePostTaskData();
+
   const {
     submitTask,
     setSubmitData,
@@ -30,66 +32,65 @@ export default function Moderation() {
     isLoading: isSubmitting,
   } = useSubmitTask();
 
-  const testCompletionApi = async (data: any) => {
+  const guardRailAnswer = async (question: string, answer: string) => {
     const body = {
       model: "gpt-3.5-turbo",
-      response_format: { type: "json_object" },
       messages: [
         {
           role: "system",
-          content:
-            "specjalizujesz sie pisaniu krótkich artykułów blogowych. user podaje liste sekcji, sekcje oddzielone są nową linią. Na podstawie nazw sekcji napisz rozwiniecie każdej. Max 3 zdania dla każdej sekcji. odpowiedz zwróc w formacie JSON. Nie dopisujesz nic od siebie.",
-        },
-        {
-          role: "user",
-          content: testData.join(",\n"),
+          content: `You are returning YES or NO. You're checking if the answer: ${answer} can be considered on topic of prompt: ${question}`,
         },
       ],
     };
     const res = await getResponseFromCompletionApi(body);
     if (res.choices[0].message.content) {
-      console.log(res);
-      transfromJsonToArray(res.choices[0].message.content);
+      setGuardrailAnswer(res.choices[0].message.content);
     }
   };
-  const transfromJsonToArray = (jsonFile: any) => {
-    if (JSON.parse(jsonFile)) {
-      const parsedJson = JSON.parse(jsonFile);
-      const stringArray = Object.values(parsedJson);
-      setSubmitData({ answer: stringArray });
-    } else {
-      console.log("wrong format");
+
+  useEffect(() => {
+    if (!isNull(guardrailAnswer)) {
+      setSubmitData({ answer: guardrailAnswer });
     }
-  };
+  }, [guardrailAnswer, setSubmitData]);
 
   return (
     <>
       <div className="flex gap-4 items-center">
-        <p onClick={() => testCompletionApi(testData)}>
-          completion on mock data
+        <p onClick={() => guardRailAnswer(testJson.question, testAnswerTrue)}>
+          test guardrail on test data
         </p>
         {isCompletionLoading && <Spinner />}
       </div>
       <div className="flex gap-4 items-center">
-        <p onClick={() => getToken("blogger")}>fetch token</p>
+        <p onClick={() => getToken("liar")}>fetch token</p>
         {isTokenLoading && <Spinner />}
       </div>
       {token && (
         <div className="flex gap-4 items-center">
-          <p onClick={() => getTaskData(token)}>get task data</p>
+          <p
+            onClick={() =>
+              postTaskData(token, testJson, customHeadersWwwFromUrlEncoded)
+            }
+          >
+            get task data
+          </p>
           {isTaskDataLoading && <Spinner />}
         </div>
       )}
       {taskData && (
         <div className="flex gap-4 items-center">
-          <p onClick={() => testCompletionApi(taskData.blog)}>
-            get completion from chatgpt
+          <p
+            onClick={() => guardRailAnswer(testJson.question, taskData.answer)}
+          >
+            guardrail an answer from GPT
           </p>
           {isCompletionLoading && <Spinner />}
         </div>
       )}
       {submitData && (
         <div className="flex gap-4 items-center">
+          {guardrailAnswer}
           <p onClick={() => submitTask(token, submitData)}>Submit task</p>
           {isSubmitting && <Spinner />}
         </div>

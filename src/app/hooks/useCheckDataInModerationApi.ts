@@ -1,5 +1,5 @@
 import axios from "axios";
-import { customHeaders } from "../helpers/customHeader";
+import { customHeadersJson } from "../helpers/customHeaders";
 import { useState } from "react";
 
 export const useCheckDataInModerationApi = () => {
@@ -10,7 +10,7 @@ export const useCheckDataInModerationApi = () => {
       const response = await axios.post(
         "https://api.openai.com/v1/moderations",
         { input: data },
-        customHeaders
+        customHeadersJson
       );
       if (response.data) {
         return response.data;

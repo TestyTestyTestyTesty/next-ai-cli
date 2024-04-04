@@ -6,22 +6,17 @@ import { useSubmitTask } from "@/app/hooks/useSubmitTask";
 import { Spinner } from "@/app/modules/Spinner";
 import { isNull } from "lodash";
 
-const testData = [
-  "Wstęp: kilka słów na temat historii pizzy",
-  "Niezbędne składniki na pizzę",
-  "Robienie pizzy",
-  "Pieczenie pizzy w piekarniku",
-];
-
-export default function Moderation() {
+export default function Inprompt() {
   const { token, getToken, isLoading: isTokenLoading } = useGetToken();
   const { getResponseFromCompletionApi, isLoading: isCompletionLoading } =
     useCompletionApi();
+
   const {
     taskData,
     getTaskData,
     isLoading: isTaskDataLoading,
   } = useGetTaskData();
+
   const {
     submitTask,
     setSubmitData,
@@ -30,48 +25,29 @@ export default function Moderation() {
     isLoading: isSubmitting,
   } = useSubmitTask();
 
-  const testCompletionApi = async (data: any) => {
+  const findAnswer = async (context: any, question: string) => {
     const body = {
       model: "gpt-3.5-turbo",
-      response_format: { type: "json_object" },
       messages: [
         {
           role: "system",
-          content:
-            "specjalizujesz sie pisaniu krótkich artykułów blogowych. user podaje liste sekcji, sekcje oddzielone są nową linią. Na podstawie nazw sekcji napisz rozwiniecie każdej. Max 3 zdania dla każdej sekcji. odpowiedz zwróc w formacie JSON. Nie dopisujesz nic od siebie.",
+          content: `Answer user question. context: ${context}`,
         },
         {
           role: "user",
-          content: testData.join(",\n"),
+          content: question,
         },
       ],
     };
     const res = await getResponseFromCompletionApi(body);
     if (res.choices[0].message.content) {
-      console.log(res);
-      transfromJsonToArray(res.choices[0].message.content);
+      setSubmitData({ answer: res.choices[0].message.content });
     }
   };
-  const transfromJsonToArray = (jsonFile: any) => {
-    if (JSON.parse(jsonFile)) {
-      const parsedJson = JSON.parse(jsonFile);
-      const stringArray = Object.values(parsedJson);
-      setSubmitData({ answer: stringArray });
-    } else {
-      console.log("wrong format");
-    }
-  };
-
   return (
     <>
       <div className="flex gap-4 items-center">
-        <p onClick={() => testCompletionApi(testData)}>
-          completion on mock data
-        </p>
-        {isCompletionLoading && <Spinner />}
-      </div>
-      <div className="flex gap-4 items-center">
-        <p onClick={() => getToken("blogger")}>fetch token</p>
+        <p onClick={() => getToken("inprompt")}>fetch token</p>
         {isTokenLoading && <Spinner />}
       </div>
       {token && (
@@ -82,8 +58,8 @@ export default function Moderation() {
       )}
       {taskData && (
         <div className="flex gap-4 items-center">
-          <p onClick={() => testCompletionApi(taskData.blog)}>
-            get completion from chatgpt
+          <p onClick={() => findAnswer(taskData.input, taskData.question)}>
+            Find an answer to the question
           </p>
           {isCompletionLoading && <Spinner />}
         </div>

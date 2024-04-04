@@ -2,13 +2,13 @@ import axios from "axios";
 import { customHeadersJson } from "../helpers/customHeaders";
 import { useState } from "react";
 
-export const useCompletionApi = () => {
+export const useEmbeddingsApi = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const getResponseFromCompletionApi = async (data: any) => {
+  const getResponseFromEmbeddingsApi = async (data: any) => {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
+        "https://api.openai.com/v1/embeddings",
         data,
         customHeadersJson
       );
@@ -27,5 +27,5 @@ export const useCompletionApi = () => {
       setIsLoading(false);
     }
   };
-  return { getResponseFromCompletionApi, isLoading };
+  return { getResponseFromEmbeddingsApi, isLoading };
 };
