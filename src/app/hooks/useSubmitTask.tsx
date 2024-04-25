@@ -4,7 +4,7 @@ interface submitData {
   answer: any;
 }
 export const useSubmitTask = () => {
-  const [submitData, setSubmitData] = useState<submitData | null>(null);
+  const [submitData, setSubmitData] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [submitResponse, setSubmitResponse] = useState<any>(null);
   const submitTask = useCallback(async (token: string, data: any) => {

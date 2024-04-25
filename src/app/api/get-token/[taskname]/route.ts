@@ -4,16 +4,17 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
-  const taskName = req.url?.split("/").pop();
-  if (!taskName) {
+  const token = req.url?.split("/").pop();
+  if (!token) {
     return res.status(400).send("Task name is required");
   }
+
   try {
     const requestBody = {
       apikey: process.env.AI_DEVS_API,
     };
     const response = await axios.post(
-      `https://tasks.aidevs.pl/token/${taskName}`,
+      `https://tasks.aidevs.pl/token/${token}`,
       requestBody
     );
 
