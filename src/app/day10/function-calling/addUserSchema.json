@@ -1,0 +1,18 @@
+{
+  "name": "addUser",
+  "description": "function to add users to the database",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "surname": {
+        "type": "string"
+      },
+      "year": {
+        "type": "integer"
+      }
+    }
+  }
+}
