@@ -22,5 +22,9 @@ export const useGetTaskData = () => {
     }
   }, []);
 
-  return { taskData, getTaskData, isLoading };
+  const resetTaskData = () => {
+    setTaskData(null);
+  };
+
+  return { taskData, getTaskData, isLoading, resetTaskData };
 };
