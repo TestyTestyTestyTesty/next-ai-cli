@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@uidotdev/usehooks": "^2.4.1",
     "axios": "^1.6.8",
     "fs": "^0.0.1-security",
     "lodash": "^4.17.21",
