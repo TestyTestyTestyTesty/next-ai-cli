@@ -1,9 +1,9 @@
 import axios from "axios";
 import { isNil } from "lodash";
 import type { NextApiResponse } from "next";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request, res: NextApiResponse) {
+export async function POST(req: NextRequest, res: NextApiResponse) {
   const data = await req.json();
   const token = req.url?.split("/").pop();
   if (!token || !data) {

@@ -7,10 +7,6 @@ import { Spinner } from "@/app/modules/Spinner";
 import axios from "axios";
 import { isNull } from "lodash";
 
-export const TYPE_OF_FUNCTION = {
-  TO_DO: "ToDo",
-  CALENDAR: "Calendar",
-};
 export default function Meme() {
   console.log(process.env.NEXT_PUBLIC_RENDERFORM_API);
   const { getResponseFromCompletionApi } = useCompletionApi();

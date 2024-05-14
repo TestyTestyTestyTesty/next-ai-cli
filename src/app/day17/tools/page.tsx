@@ -6,10 +6,10 @@ import { useSubmitTask } from "@/app/hooks/useSubmitTask";
 import { Spinner } from "@/app/modules/Spinner";
 import { isNull } from "lodash";
 
-export const TYPE_OF_FUNCTION = {
-  TO_DO: "ToDo",
-  CALENDAR: "Calendar",
-};
+enum TYPE_OF_FUNCTION {
+  TO_DO = "ToDo",
+  CALENDAR = "Calendar",
+}
 export default function People() {
   const { getResponseFromCompletionApi } = useCompletionApi();
   const { token, getToken, isLoading: isTokenLoading } = useGetToken();

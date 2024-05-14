@@ -1,7 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 import puppeteer from "puppeteer-extra";
-import { executablePath } from "puppeteer";
-import { NextResponse } from "next/server";
 
 async function getTextFromUrl(url: string, maxRetries = 5, retryDelay = 2000) {
   let retryCount = 0;
@@ -47,7 +46,7 @@ async function getTextFromUrl(url: string, maxRetries = 5, retryDelay = 2000) {
   return new Error("Max retries exceeded. Unable to fetch text.");
 }
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest, res: NextApiResponse) {
   const url = req.url?.split("/").pop();
   if (!url) {
     return res.status(400).send("Task name is required");

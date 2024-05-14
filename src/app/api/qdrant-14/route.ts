@@ -1,15 +1,15 @@
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { QdrantClient } from "@qdrant/js-client-rest";
 import { Document } from "langchain/document";
-import type { NextApiRequest, NextApiResponse } from "next";
-import { NextResponse } from "next/server";
+import type { NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 const archive_path = "https://unknow.news/archiwum_aidevs.json";
 const COLLECTION_NAME = "unknown_news";
 interface collection {
   name: string;
 }
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest, res: NextApiResponse) {
   const embeddings = new OpenAIEmbeddings({
     maxConcurrency: 5,
     apiKey: process.env.NEXT_PUBLIC_OPEN_AI_API,

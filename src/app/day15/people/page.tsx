@@ -43,7 +43,7 @@ export default function People() {
       if (response) {
         setJsonData(response.data);
       } else {
-        throw new Error(response.data.msg);
+        throw new Error("error");
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

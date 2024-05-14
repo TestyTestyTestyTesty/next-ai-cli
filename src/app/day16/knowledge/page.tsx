@@ -7,12 +7,12 @@ import { Spinner } from "@/app/modules/Spinner";
 import axios from "axios";
 import { isNull } from "lodash";
 
-export const TYPE_OF_DATA = {
-  EXCHANGE: "fetchExchangeRate",
-  POPULATION: "fetchPopulation",
-  CAPITAL: "fetchCapital",
-  GENERAL: "general",
-};
+enum TYPE_OF_DATA {
+  EXCHANGE = "fetchExchangeRate",
+  POPULATION = "fetchPopulation",
+  CAPITAL = "fetchCapital",
+  GENERAL = "general",
+}
 export default function People() {
   const { getResponseFromCompletionApi } = useCompletionApi();
   const { token, getToken, isLoading: isTokenLoading } = useGetToken();
